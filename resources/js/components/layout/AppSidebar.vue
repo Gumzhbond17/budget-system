@@ -33,9 +33,7 @@
                 </span>
             </router-link>
         </div>
-        <div
-            class="no-scrollbar flex flex-col overflow-y-auto"
-        >
+        <div class="no-scrollbar flex flex-col overflow-y-auto">
             <nav class="mb-6">
                 <div class="flex flex-col gap-4">
                     <div
@@ -258,8 +256,9 @@
     </aside>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue';
+import type { Component } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
@@ -282,9 +281,29 @@ const auth = useAuthStore();
 
 const { isExpanded, isMobileOpen, isHovered, openSubmenu } = useSidebar();
 
+interface NavSubItem {
+    name: string;
+    path: string;
+    /** ປ້າຍ "pro"/"new" ຂອງ template ເດີມ — ຍັງບໍ່ມີເມນູໃດໃຊ້ */
+    pro?: boolean;
+    new?: boolean;
+}
+
+interface NavItem {
+    icon: Component;
+    name: string;
+    path?: string;
+    subItems?: NavSubItem[];
+}
+
+interface NavGroup {
+    title: string;
+    items: NavItem[];
+}
+
 // ເມນູຕາມໂຄງສ້າງລະບົບຈິງ (docs/architecture.md ພາກ 5.1).
 // ລາຍການທີ່ຍັງບໍ່ທັນສ້າງໜ້າ ຖືກ comment ໄວ້ — ຫ້າມໃສ່ link ທີ່ກົດແລ້ວຫຼົງ 404
-const menuGroups = computed(() => [
+const menuGroups = computed<NavGroup[]>(() => [
     {
         title: 'nav.menu',
         items: [
@@ -407,9 +426,9 @@ const menuGroups = computed(() => [
     },
 ]);
 
-const isActive = (path) => route.path === path;
+const isActive = (path?: string) => route.path === path;
 
-const toggleSubmenu = (groupIndex, itemIndex) => {
+const toggleSubmenu = (groupIndex: number, itemIndex: number) => {
     const key = `${groupIndex}-${itemIndex}`;
     openSubmenu.value = openSubmenu.value === key ? null : key;
 };
@@ -424,7 +443,7 @@ const isAnySubmenuRouteActive = computed(() => {
     );
 });
 
-const isSubmenuOpen = (groupIndex, itemIndex) => {
+const isSubmenuOpen = (groupIndex: number, itemIndex: number) => {
     const key = `${groupIndex}-${itemIndex}`;
 
     return (
@@ -436,15 +455,17 @@ const isSubmenuOpen = (groupIndex, itemIndex) => {
     );
 };
 
-const startTransition = (el) => {
+const startTransition = (node: Element) => {
+    const el = node as HTMLElement;
     el.style.height = 'auto';
     const height = el.scrollHeight;
     el.style.height = '0px';
-    el.offsetHeight; // force reflow
+    // ອ່ານຄ່າເພື່ອບັງຄັບ reflow — ບໍ່ດັ່ງນັ້ນ browser ຂ້າມ 0px ແລ້ວບໍ່ມີ animation
+    void el.offsetHeight;
     el.style.height = height + 'px';
 };
 
-const endTransition = (el) => {
-    el.style.height = '';
+const endTransition = (node: Element) => {
+    (node as HTMLElement).style.height = '';
 };
 </script>

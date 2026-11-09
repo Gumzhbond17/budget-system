@@ -16,7 +16,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useSidebar } from '@/composables/useSidebar';
 import AppHeader from './AppHeader.vue';
 import AppSidebar from './AppSidebar.vue';

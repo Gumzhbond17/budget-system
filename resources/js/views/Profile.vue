@@ -30,7 +30,11 @@
                                     : t('profile.avatar.upload')
                             "
                             :disabled="avatarBusy"
-                            @click="user?.avatar_url ? (lightboxOpen = true) : pickAvatar()"
+                            @click="
+                                user?.avatar_url
+                                    ? (lightboxOpen = true)
+                                    : pickAvatar()
+                            "
                         >
                             <UserAvatar
                                 :name="user?.name"
@@ -370,9 +374,7 @@ async function removeAvatar(): Promise<void> {
     avatarError.value = null;
 
     try {
-        const { data } = await api.delete<{ data: AppUser }>(
-            '/profile/avatar',
-        );
+        const { data } = await api.delete<{ data: AppUser }>('/profile/avatar');
 
         applyProfile(data.data);
         toastSuccess(t('profile.avatar.removed'));

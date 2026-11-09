@@ -321,7 +321,9 @@ async function rejectInactiveAccess(): Promise<void> {
     const company = user?.company;
 
     let title = t('accessExpired.title');
-    let body = company ? t('accessExpired.body', { company: company.name }) : '';
+    let body = company
+        ? t('accessExpired.body', { company: company.name })
+        : '';
 
     if (user?.is_active === false) {
         title = t('auth.accountDisabled');

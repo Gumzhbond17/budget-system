@@ -107,34 +107,36 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+interface Option {
+    value: string | number;
+    label: string;
+}
+
 const { t } = useI18n();
 
-const props = defineProps({
-    options: {
-        type: Array,
-        required: true,
-    },
-    modelValue: {
-        type: Array,
-        default: () => [],
-    },
-});
+const props = withDefaults(
+    defineProps<{
+        options: Option[];
+        modelValue?: Option[];
+    }>(),
+    { modelValue: () => [] },
+);
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits<{ 'update:modelValue': [value: Option[]] }>();
 
 const isOpen = ref(false);
-const selectedItems = ref(props.modelValue);
-const multiSelectRef = ref(null);
+const selectedItems = ref<Option[]>(props.modelValue);
+const multiSelectRef = ref<HTMLElement | null>(null);
 
 const toggleDropdown = () => {
     isOpen.value = !isOpen.value;
 };
 
-const toggleItem = (item) => {
+const toggleItem = (item: Option) => {
     const index = selectedItems.value.findIndex(
         (selected) => selected.value === item.value,
     );
@@ -148,7 +150,7 @@ const toggleItem = (item) => {
     emit('update:modelValue', selectedItems.value);
 };
 
-const removeItem = (item) => {
+const removeItem = (item: Option) => {
     const index = selectedItems.value.findIndex(
         (selected) => selected.value === item.value,
     );
@@ -159,14 +161,17 @@ const removeItem = (item) => {
     }
 };
 
-const isSelected = (item) => {
+const isSelected = (item: Option) => {
     return selectedItems.value.some(
         (selected) => selected.value === item.value,
     );
 };
 
-const handleClickOutside = (event) => {
-    if (multiSelectRef.value && !multiSelectRef.value.contains(event.target)) {
+const handleClickOutside = (event: MouseEvent) => {
+    if (
+        multiSelectRef.value &&
+        !multiSelectRef.value.contains(event.target as Node)
+    ) {
         isOpen.value = false;
     }
 };

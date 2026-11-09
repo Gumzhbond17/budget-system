@@ -79,6 +79,8 @@ export default defineConfigWithVueTs(
         ignores: [
             'vendor',
             'node_modules',
+            // ແມ່ແບບ UI ທີ່ເກັບໄວ້ອ້າງອີງ — ມີ .git ຂອງມັນເອງ ແລະ ບໍ່ຢູ່ໃນ repo (.gitignore)
+            'vite-tailwind-admin-2026/**',
             'public',
             'bootstrap/ssr',
             'tailwind.config.js',
