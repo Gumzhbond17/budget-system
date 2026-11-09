@@ -1,0 +1,39 @@
+/.phpunit.cache
+/bootstrap/ssr
+/node_modules
+/public/build
+/public/fonts-manifest.dev.json
+/public/hot
+/public/storage
+/resources/js/actions
+/resources/js/routes
+/resources/js/wayfinder
+/storage/*.key
+/storage/pail
+/vendor
+.env
+.env.backup
+.env.production
+.phpactor.json
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+/auth.json
+/.fleet
+/.idea
+/.nova
+/.vscode
+/.zed
+
+# Local SQLite database file — may hold real users / hashed passwords / encrypted credentials
+/sss_solar_expense
+*.sqlite
+*.sqlite3
+
+# UI template kept for reference only — has its own .git and node_modules
+/vite-tailwind-admin-2026
+
+# Per-developer Claude Code permissions
+/.claude/settings.local.json
